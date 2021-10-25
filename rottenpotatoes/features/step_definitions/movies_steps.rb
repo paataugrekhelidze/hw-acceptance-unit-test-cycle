@@ -5,6 +5,10 @@ Given /the following movies exist/ do |movies_table|
   end
 end
 
+Then /the director of "(.*)" should be "(.*)"/ do |movie_title, movie_director|
+  expect(movie_director).to eq Movie.find_by(title: movie_title)[:director]
+end
+
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.

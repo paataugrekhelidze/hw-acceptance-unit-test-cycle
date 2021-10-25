@@ -45,6 +45,10 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
 
+When /^I go to the edit page for "([^"]*)"$/ do |page_name|
+  visit path_to("#{Movie.find_by(title: page_name).id}/edit")
+end
+
 When /^(?:|I )go to (.+)$/ do |page_name|
   visit path_to(page_name)
 end
@@ -58,7 +62,11 @@ When /^(?:|I )follow "([^"]*)"$/ do |link|
 end
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
-  fill_in(field, :with => value)
+  if field=="Director"
+      fill_in("movie_director", :with => value)
+  else
+    fill_in(field, :with => value)
+  end
 end
 
 When /^(?:|I )fill in "([^"]*)" for "([^"]*)"$/ do |value, field|

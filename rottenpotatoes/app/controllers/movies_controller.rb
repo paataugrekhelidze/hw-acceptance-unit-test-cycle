@@ -7,7 +7,13 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @tag="dont"
     @movies = Movie.all
+    if params.has_key?(:tag)
+      @tag=params[:tag]      
+    end
+    puts "tag: #{@tag}"
+    puts "actual: #{params[:tag]}"
   end
 
   def new
@@ -22,6 +28,16 @@ class MoviesController < ApplicationController
 
   def edit
     @movie = Movie.find params[:id]
+  end
+  
+  def similar
+    @movie = Movie.find params[:id]
+    if (@movie[:director] == '') || (@movie[:director] == nil)
+      puts "should pass: #{@movie[:title]}"
+      redirect_to controller: "movies", tag: @movie[:title]
+    else
+      @movies = Movie.where(:director => @movie.director)
+    end    
   end
 
   def update
@@ -42,6 +58,6 @@ class MoviesController < ApplicationController
   # Making "internal" methods private is not required, but is a common practice.
   # This helps make clear which methods respond to requests, and which ones do not.
   def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+    params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
   end
 end
